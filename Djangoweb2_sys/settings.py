@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app01.apps.App01Config'
 ]
 
 MIDDLEWARE = [
@@ -45,7 +46,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'app01.apps.App01Config'
 ]
 
 ROOT_URLCONF = 'Djangoweb2_sys.urls'
@@ -73,8 +73,12 @@ WSGI_APPLICATION = 'Djangoweb2_sys.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # 使用MySQL
+        'NAME': 'djangoweb2_sys',  # 数据库名称,不是表名
+        'USER': 'root',  # 账户
+        'PASSWORD': 'Lxb@12345',
+        'HOST': '127.0.0.1',  # 安装数据库的电脑IP
+        'PORT': 3306  # 整形的端口
     }
 }
 

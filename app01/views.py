@@ -109,8 +109,17 @@ class UserModelForm(forms.ModelForm):
 
 def user_add_model(request):
     """ 新增用户 使用模板表单ModelForm,使用组件,把一些校验操作,提示操作完成了. """
-    form = UserModelForm()
-    return render(request, 'user_model_form_add.html', {"form": form})
+    if request.method == "GET":
+        form = UserModelForm()
+        return render(request, 'user_model_form_add.html', {"form": form})
+    # 获取POST提交的数据,并对数据进行校验.
+    form = UserModelForm(data=request.POST)
+    if form.is_valid():
+        # print(form.cleaned_data)
+        form.save()  # 直接保存到数据库里,简直不要太粗暴...
+        return redirect("/user/list")
+    else:
+        print(form.errors)
 
 
 def user_edit(request, nid):

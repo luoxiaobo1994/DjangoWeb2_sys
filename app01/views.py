@@ -114,12 +114,12 @@ def user_add_model(request):
         return render(request, 'user_model_form_add.html', {"form": form})
     # 获取POST提交的数据,并对数据进行校验.
     form = UserModelForm(data=request.POST)
-    if form.is_valid():
+    if form.is_valid():  # 校验成功.
         # print(form.cleaned_data)
         form.save()  # 直接保存到数据库里,简直不要太粗暴...
         return redirect("/user/list")
-    else:
-        print(form.errors)
+    # 校验失败.在页面上显示错误信息.
+    return render(request,'user_model_form_add.html',{"form": form})
 
 
 def user_edit(request, nid):

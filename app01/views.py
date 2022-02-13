@@ -46,3 +46,79 @@ def modify_depart(request, nid):  # nid=连接时自带的
     if new_title:
         models.Department.objects.filter(id=nid).update(title=new_title)
     return redirect("/depart/list/")
+
+
+def user_list(request):
+    """ 用户管理 """
+    queryset = models.UserInfo.objects.all()
+    # depart = models.Department.objects.filter(id=queryset)
+    return render(request, 'user_list.html', {'object': queryset})
+
+
+def user_add(request):
+    """ 新增用户(原始的方式):很麻烦,不采取,这是初初初级的程序员才会用的 """
+    if request.method == "GET":
+        context = {
+            'gender_choices': models.UserInfo.gender_choices,
+            'depart_list': models.Department.objects.all()
+        }
+        return render(request, 'user_add.html', context)
+    # POST请求,先获取用户提交的数据.
+    name = request.POST.get("name")
+    password = request.POST.get("password")
+    gender = request.POST.get("gender")
+    account = request.POST.get("account")
+    create_time = request.POST.get("create_time")
+    department = request.POST.get("department")
+    age = request.POST.get("age")
+    # 添加到数据库:问题1,没有校验. 问题2,输入错误没有提示. 问题3,输入错误,跳转报错界面,不美观. 问题4,每个字段都重新校验则比较麻烦.
+    models.UserInfo.objects.create(
+        name=name,
+        password=password,
+        age=age,
+        gender=gender,
+        account=float('%.2f' % account),  # 取两位小数
+        create_time=create_time,
+        depart_id=department
+    )
+    return redirect("/user/list/")
+
+
+# --------------- ModelForm实例 ---------------
+from django import forms
+
+
+class UserModelForm(forms.ModelForm):
+    class Meta:
+        model = models.UserInfo
+        fields = ['name', 'password', 'age', 'create_time', 'gender', 'account', 'depart']
+        # widgets = {  # 老土的办法,一个一个去定义,这么写,容易挨叼.
+        #     "name":forms.TextInput(attrs={"class":"form-control"}),
+        #     "password":forms.PasswordInput(attrs={"class":"form-control"}),
+        #     "age":forms.NumberInput(attrs={"class":"form-control"}),
+        #     "create_time":forms.TextInput(attrs={"class":"form-control"}),
+        # }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            # print(name,field)
+            field.widget.attrs = {"class": "form-control", "placeholder": name}
+
+
+def user_add_model(request):
+    """ 新增用户 使用模板表单ModelForm,使用组件,把一些校验操作,提示操作完成了. """
+    form = UserModelForm()
+    return render(request, 'user_model_form_add.html', {"form": form})
+
+
+def user_edit(request, nid):
+    user_info = models.UserInfo.objects.filter(id=nid).first()
+    if request.method == "GET":  # 从用户列表访问这个界面. 则显示你要修改的部门信息.
+        return render(request, 'user_edit.html', {"user_info": user_info})
+    # 拿到修改后的部门名称
+    new_title = request.POST.get('title')  # 已经在这个界面,进入保存操作,则是POST进来的.
+    if new_title:
+        models.Department.objects.filter().update(title=new_title)
+    return redirect("/user/list/")

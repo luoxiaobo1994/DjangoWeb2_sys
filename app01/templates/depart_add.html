@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DjangoWeb项目:用户管理系统</title>
+    <title>添加部门</title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <style>
         .navbar {
@@ -50,52 +50,24 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
 <div>
     <div class="container">
-        <!-- 按钮区域 -->
-
-        <div style="margin-bottom: 10px">
-            <a class="btn btn-success" href="/depart/add">  <!-- 默认在原页面打开,如果需要打开一个新页面则添加:target="_blank" -->
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  <!-- 加上一个图标 -->
-                新建部门
-            </a>
-        </div>
-        <!-- 表格区域 -->
         <div class="panel panel-default">
-            <!-- Default panel contents -->
             <div class="panel-heading">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  <!-- 加上一个图标 -->
-                部门列表
+                <h3 class="panel-title"> 新建部门 </h3>
             </div>
-
-            <!-- Table -->
-            <table class="table table-bordered">  <!-- table-bordered 是添加表格边线-->
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>部门名称</th>
-                    <th>操作</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {% for obj in queryset %}
-                    <tr>
-                        <th scope="row">{{ obj.id }}</th>
-                        <td>{{ obj.title }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-xs" style="margin-right: 10px" href="/depart/{{ obj.id }}/modify/?nid={{ obj.id }}">编辑</a>
-                            <a class="btn btn-danger btn-xs" href="/depart/delete/?nid={{ obj.id }}">删除</a>
-                        </td>
-
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %} {# post方式,需要加这行 #}
+                    <div class="form-group">
+                        <label>部门名称</label>
+                        <input type="text" class="form-control" placeholder="输入需要添加的部门名称" name="title"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">保 存</button>
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>

@@ -77,7 +77,7 @@ DATABASES = {
         'NAME': 'djangoweb2_sys',  # 数据库名称,不是表名
         'USER': 'root',  # 账户
         'PASSWORD': 'Lxb@12345',
-        'HOST': '127.0.0.1',  # 安装数据库的电脑IP
+        'HOST': 'localhost',  # 安装数据库的电脑IP
         'PORT': 3306  # 整形的端口
     }
 }

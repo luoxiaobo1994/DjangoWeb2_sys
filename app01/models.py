@@ -7,6 +7,9 @@ class Department(models.Model):
     # 部门表,只存部门名称
     title = models.CharField(max_length=32, verbose_name="标题")
 
+    def __str__(self):
+        return self.title  # 方便循环显示时的对象属性显示.
+
 
 class UserInfo(models.Model):
     # 员工表,员工信息
@@ -25,4 +28,5 @@ class UserInfo(models.Model):
     # on_delete 级联删除,部门id被删除的情况下,把这个用户也干掉.
     # 也可以,允许置空,设置默认值为空,删除部门ID时,保留该用户.
     # depart = models.ForeignKey(to="Department",to_field="id",null=True,on_delete=models.SET_NULL)  # 可为空方式.
-    depart = models.ForeignKey(to="Department", to_field="id", on_delete=models.CASCADE)
+    # 生成字段的名称叫做depart,因为是外键,实际数据库生成的是:depart_id.
+    depart = models.ForeignKey(verbose_name="部门", to="Department", to_field="id", on_delete=models.CASCADE)

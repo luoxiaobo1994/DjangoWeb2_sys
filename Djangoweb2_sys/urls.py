@@ -30,4 +30,5 @@ urlpatterns = [
     path('user/add/',views.user_add),
     path('user/model_add/',views.user_add_model),
     path('user/<int:nid>/edit/',views.user_edit),
+    path('user/<int:nid>/delete/',views.user_delete),
 ]

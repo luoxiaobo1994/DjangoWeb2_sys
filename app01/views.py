@@ -119,15 +119,23 @@ def user_add_model(request):
         form.save()  # 直接保存到数据库里,简直不要太粗暴...
         return redirect("/user/list")
     # 校验失败.在页面上显示错误信息.
-    return render(request,'user_model_form_add.html',{"form": form})
+    return render(request, 'user_model_form_add.html', {"form": form})
 
 
 def user_edit(request, nid):
-    user_info = models.UserInfo.objects.filter(id=nid).first()
-    if request.method == "GET":  # 从用户列表访问这个界面. 则显示你要修改的部门信息.
-        return render(request, 'user_edit.html', {"user_info": user_info})
-    # 拿到修改后的部门名称
-    new_title = request.POST.get('title')  # 已经在这个界面,进入保存操作,则是POST进来的.
-    if new_title:
-        models.Department.objects.filter().update(title=new_title)
-    return redirect("/user/list/")
+    row_objetc = models.UserInfo.objects.filter(id=nid).first()
+    form = UserModelForm(instance=row_objetc)
+    if request.method == "GET":  # 从用户列表访问这个界面. 则显示你要修改的用户信息.
+        return render(request, 'user_edit.html', {"form": form})
+    # 校验用户数据
+    row_objetc = models.UserInfo.objects.filter(id=nid).first()  # 还是拿到要修改的那行数据
+    form = UserModelForm(data=request.POST, instance=row_objetc)  # instance告诉你要修改这行,不然save就新增数据了.
+    if form.is_valid():
+        form.save()
+        return redirect('/user/list/')
+    return render(request, 'user_edit.html', {'form': form})
+
+
+def user_delete(request, nid):
+    models.UserInfo.objects.filter(id=nid).delete()
+    return redirect('/user/list/')

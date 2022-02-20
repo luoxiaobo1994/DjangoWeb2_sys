@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from app01 import models
+from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 
 # Create your views here.
@@ -139,3 +141,86 @@ def user_edit(request, nid):
 def user_delete(request, nid):
     models.UserInfo.objects.filter(id=nid).delete()
     return redirect('/user/list/')
+
+
+# ------------------ 靓号管理功能  ----------------------
+
+class PrettyModelForm(forms.ModelForm):
+    # 验证的方式1,直接找指定字段,添加校验规则.
+    mobile = forms.CharField(
+        label="手机号",
+        validators=[RegexValidator(r"^1[3-9]\d{9}$", '手机号格式错误')]
+    )
+
+    # 校验的方式2,钩子方法. 无需调用,直接生效.  前提是要有这个字段.
+    # def clean_mobile(self):
+    #     text_mobile = self.cleaned_data['mobile']
+    #     if len(text_mobile) != 11:
+    #         # 验证不通过,把错误原因返回.
+    #         raise ValidationError("格式错误:长度不足11位.")
+    #     # 验证通过,把用户输入的值返回
+    #     return text_mobile
+
+    class Meta:
+        model = models.PrettyNum
+        # fields = '__all__'  # 直接引用表里的所有字段
+        fields = ['mobile', 'price', 'level', 'status']  # 自定义需要的字段
+        # exclude = ['level'] # 除了被选中的字段,都要.
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            # print(name,field)
+            field.widget.attrs = {"class": "form-control", "placeholder": name}
+
+
+def pretty_list(request):
+    """ 靓号列表 """
+    queryset = models.PrettyNum.objects.all().order_by('-level')  # 排序选一个字段,加上-就是倒叙,不加就是升序.
+    return render(request, 'pretty_list.html', {'form': queryset})
+
+
+def pretty_add(request):
+    """ 靓号添加功能 """
+    if request.method == "GET":
+        form = PrettyModelForm()
+        return render(request, 'pretty_add.html', {'form': form})
+    form = PrettyModelForm(data=request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('/pretty/list')
+    return render(request, 'pretty_add.html', {"form": form})
+
+
+class PrettyEditModelForm(forms.ModelForm):
+    # 不让修改手机号
+    mobile = forms.CharField(disabled=True,label="手机号")
+
+    class Meta:
+        model = models.PrettyNum
+        # fields = '__all__'  # 直接引用表里的所有字段
+        fields = ['mobile','price', 'level', 'status']  # 自定义需要的字段
+        # exclude = ['level'] # 除了被选中的字段,都要.
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            # print(name,field)
+            field.widget.attrs = {"class": "form-control", "placeholder": name}
+
+
+def pretty_edit(request, nid):
+    """ 靓号编辑功能 """
+    row_objetc = models.PrettyNum.objects.filter(id=nid).first()
+    form = PrettyEditModelForm(instance=row_objetc)
+    if request.method == "GET":  # 从用户列表访问这个界面. 则显示你要修改的用户信息.
+        return render(request, 'pretty_edit.html', {"form": form})
+    # 校验用户数据
+    row_objetc = models.UserInfo.objects.filter(id=nid).first()  # 还是拿到要修改的那行数据
+    form = PrettyModelForm(data=request.POST, instance=row_objetc)  # instance告诉你要修改这行,不然save就新增数据了.
+    if form.is_valid():
+        form.save()
+        return redirect('/pretty/list/')
+    return render(request, 'pretty_edit.html', {'form': form})

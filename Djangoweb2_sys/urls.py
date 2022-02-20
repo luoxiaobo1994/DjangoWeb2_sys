@@ -18,7 +18,7 @@ from django.urls import path
 from app01 import views
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('127.0.0.1:8000', views.user_list),
     path('depart/list/', views.depart_list),
     path('depart/add/', views.add_depart),
     path('depart/delete/', views.del_depart),
@@ -31,4 +31,8 @@ urlpatterns = [
     path('user/model_add/',views.user_add_model),
     path('user/<int:nid>/edit/',views.user_edit),
     path('user/<int:nid>/delete/',views.user_delete),
+    # 下面是关于靓号管理的.
+    path('pretty/list/',views.pretty_list),
+    path('pretty/add/',views.pretty_add),
+    path('pretty/<int:nid>/edit/',views.pretty_edit)
 ]

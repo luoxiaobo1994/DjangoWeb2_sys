@@ -32,6 +32,19 @@ class UserInfo(models.Model):
     depart = models.ForeignKey(verbose_name="部门", to="Department", to_field="id", on_delete=models.CASCADE)
 
 
+class OrderData(models.Model):
+    ls = ("Order ID (M)", "Batch ID (O)", "Business type (M)", "Business process (M)", "Priority (M)",
+          "Container type (M)"
+          , "Item name (M)", "Item code(M)", "Item image link (O)", "Item count (M)", "Bin location (M)",
+          "Sequential execution (O)")
+    Order_ID = models.SlugField(verbose_name='订单ID(必填)', max_length=64)  # 减号,下划线,字母,数字
+    batch_choices = ((1,'1'), (2,'2'), (3,'3'), (4,'4'), (5,'5'))
+    Batch_ID = models.SmallIntegerField(verbose_name='优先级(选填)', default=1, choices=batch_choices)
+    business_type_choices = ((1, 'Picking'),)
+    Business_type = models.SmallIntegerField(verbose_name="业务类型(必填)",default=1,choices=business_type_choices)
+
+
+
 class PrettyNum(models.Model):
     """ 靓号表 """
     mobile = models.CharField(verbose_name="手机号", max_length=11)

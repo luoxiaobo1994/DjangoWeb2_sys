@@ -107,8 +107,8 @@ class UserModelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for name, field in self.fields.items():
-            # print(name,field)
-            field.widget.attrs = {"class": "form-control", "placeholder": name}
+            # print(name,field) # placeholder不能直接调用到verbosname,折中使用field的leibel属性.
+            field.widget.attrs = {"class": "form-control", "placeholder": field.label}
 
 
 def user_add_model(request):

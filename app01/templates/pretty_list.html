@@ -4,11 +4,24 @@
         <div class="container">
             <!-- 按钮区域 -->
 
-            <div style="margin-bottom: 10px">
+            <div style="margin-bottom: 10px" class="clearfix">
                 <a class="btn btn-success" href="/pretty/add/">  <!-- 默认在原页面打开,如果需要打开一个新页面则添加:target="_blank" -->
                     <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  <!-- 加上一个图标 -->
                     新建靓号
                 </a>
+                <div style="float: right;width: 300px">  <!-- 调整宽度 保证它和新建靓号处于同一行 -->
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="包含某数字组合的靓号"
+                                   value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                        </div><!-- /input-group -->
+                    </form>
+                </div>
             </div>
             <!-- 表格区域 -->
             <div class="panel panel-default">
@@ -27,6 +40,7 @@
                         <th>价格</th>
                         <th>级别</th>
                         <th>状态</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>

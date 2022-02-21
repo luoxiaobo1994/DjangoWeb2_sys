@@ -18,7 +18,7 @@ from django.urls import path
 from app01 import views
 
 urlpatterns = [
-    path('127.0.0.1:8000', views.user_list),
+    path('', views.user_list),  # '' 表示在http://127.0.0.1:8000后面,什么都不加了.就是把默认的主页指向后面的这个函数里.
     path('depart/list/', views.depart_list),
     path('depart/add/', views.add_depart),
     path('depart/delete/', views.del_depart),
@@ -26,13 +26,14 @@ urlpatterns = [
     # 使用这种方式,view函数可以多传一个nid参数.
     path('depart/<int:nid>/modify/', views.modify_depart),
     # 下面是关于用户的函数
-    path('user/list/',views.user_list),
-    path('user/add/',views.user_add),
-    path('user/model_add/',views.user_add_model),
-    path('user/<int:nid>/edit/',views.user_edit),
-    path('user/<int:nid>/delete/',views.user_delete),
+    path('user/list/', views.user_list),
+    path('user/add/', views.user_add),
+    path('user/model_add/', views.user_add_model),
+    path('user/<int:nid>/edit/', views.user_edit),
+    path('user/<int:nid>/delete/', views.user_delete),
     # 下面是关于靓号管理的.
-    path('pretty/list/',views.pretty_list),
-    path('pretty/add/',views.pretty_add),
-    path('pretty/<int:nid>/edit/',views.pretty_edit)
+    path('pretty/list/', views.pretty_list),
+    path('pretty/add/', views.pretty_add),
+    path('pretty/<int:nid>/edit/', views.pretty_edit),
+    path('pretty/<int:nid>/delete/', views.pretty_delete)
 ]

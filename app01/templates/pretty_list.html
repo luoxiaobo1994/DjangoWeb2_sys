@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div>
+        <div class="container">
+            <!-- 按钮区域 -->
+
+            <div style="margin-bottom: 10px" class="clearfix">
+                <a class="btn btn-success" href="/pretty/add/">  <!-- 默认在原页面打开,如果需要打开一个新页面则添加:target="_blank" -->
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  <!-- 加上一个图标 -->
+                    新建靓号
+                </a>
+                <div style="float: right;width: 300px">  <!-- 调整宽度 保证它和新建靓号处于同一行 -->
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="包含某数字组合的靓号"
+                                   value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                        </div><!-- /input-group -->
+                    </form>
+                </div>
+            </div>
+            <!-- 表格区域 -->
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  <!-- 加上一个图标 -->
+                    靓号列表
+                </div>
+
+                <!-- Table -->
+                <table class="table table-bordered">  <!-- table-bordered 是添加表格边线-->
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>靓号</th>
+                        <th>价格</th>
+                        <th>级别</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in form %}
+                        <tr>
+                            <td>{{ obj.id }}</td>
+                            <td>{{ obj.mobile }}</td>
+                            <td>{{ obj.price }}</td>
+                            <td>{{ obj.get_level_display }}</td>
+                            <td>{{ obj.get_status_display }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs" style="margin-right: 10px"
+                                   href="/pretty/{{ obj.id }}/edit/">编辑</a>
+                                <a class="btn btn-danger btn-xs" href="/pretty/{{ obj.id }}/delete/">删除</a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

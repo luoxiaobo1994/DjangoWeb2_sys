@@ -44,7 +44,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for obj in form %}
+                    {% for obj in queryset %}
                         <tr>
                             <td>{{ obj.id }}</td>
                             <td>{{ obj.mobile }}</td>
@@ -62,6 +62,10 @@
                     </tbody>
                 </table>
             </div>
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
         </div>
 
     </div>

@@ -2,15 +2,12 @@
 # Author: luoxiaobo
 # TIME: 2022/2/22 13:57
 
-import random
-
 from django.shortcuts import render, redirect
+
 from app01 import models
-from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
-from app01.utils.pagination import Pagination
 from app01.utils.form import UserModelForm
-from django import forms
+from app01.utils.pagination import Pagination
+
 
 # Create your views here.
 
@@ -28,32 +25,16 @@ def user_list(request):
 
 
 def user_add(request):
-    """ 新增用户(原始的方式):很麻烦,不采取,这是初初初级的程序员才会用的 """
+    """ 添加用户功能 """
     if request.method == "GET":
-        context = {
-            'gender_choices': models.UserInfo.gender_choices,
-            'depart_list': models.Department.objects.all()
-        }
-        return render(request, 'user_add.html', context)
-    # POST请求,先获取用户提交的数据.
-    name = request.POST.get("name")
-    password = request.POST.get("password")
-    gender = request.POST.get("gender")
-    account = request.POST.get("account")
-    create_time = request.POST.get("create_time")
-    department = request.POST.get("department")
-    age = request.POST.get("age")
-    # 添加到数据库:问题1,没有校验. 问题2,输入错误没有提示. 问题3,输入错误,跳转报错界面,不美观. 问题4,每个字段都重新校验则比较麻烦.
-    models.UserInfo.objects.create(
-        name=name,
-        password=password,
-        age=age,
-        gender=gender,
-        account=float('%.2f' % account),  # 取两位小数
-        create_time=create_time,
-        depart_id=department
-    )
-    return redirect("/user/list/")
+        form = UserModelForm()
+        return render(request,'user_add.html',{'form':form})
+    form = UserModelForm(data=request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('/user/list/')
+
+    return render(request,'user_add.html',{'form':form})
 
 
 # --------------- ModelForm实例 ---------------

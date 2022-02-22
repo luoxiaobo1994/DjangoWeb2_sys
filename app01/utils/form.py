@@ -11,7 +11,7 @@ from app01.utils.bootstrap import BootStrapModelForm
 
 
 # 编辑的单独ModelForm类,因为编辑和新建的校验规则不一样,所以新建一个更好.
-class PrettyEditModelForm(forms.ModelForm):
+class PrettyEditModelForm(BootStrapModelForm):
     # 不让修改手机号
     # mobile = forms.CharField(disabled=True, label="手机号")
 
@@ -21,12 +21,6 @@ class PrettyEditModelForm(forms.ModelForm):
         fields = ['mobile', 'price', 'level', 'status']  # 自定义需要的字段
         # exclude = ['level'] # 除了被选中的字段,都要.
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            # print(name,field)
-            field.widget.attrs = {"class": "form-control", "placeholder": name}
 
     # 校验手机号
     def clean_mobile(self):
@@ -42,7 +36,7 @@ class PrettyEditModelForm(forms.ModelForm):
 
 # ------------------ 靓号管理功能  ----------------------
 
-class PrettyModelForm(forms.ModelForm):
+class PrettyModelForm(BootStrapModelForm):
     # 验证的方式1,直接找指定字段,添加校验规则.
     mobile = forms.CharField(
         label="手机号",
@@ -64,15 +58,9 @@ class PrettyModelForm(forms.ModelForm):
         fields = ['mobile', 'price', 'level', 'status']  # 自定义需要的字段
         # exclude = ['level'] # 除了被选中的字段,都要.
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            # print(name,field)
-            field.widget.attrs = {"class": "form-control", "placeholder": name}
 
 
-class UserModelForm(forms.ModelForm):
+class UserModelForm(BootStrapModelForm):
     class Meta:
         model = models.UserInfo
         fields = ['name', 'password', 'age', 'create_time', 'gender', 'account', 'depart']
@@ -82,10 +70,3 @@ class UserModelForm(forms.ModelForm):
         #     "age":forms.NumberInput(attrs={"class":"form-control"}),
         #     "create_time":forms.TextInput(attrs={"class":"form-control"}),
         # }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for name, field in self.fields.items():
-            # print(name,field) # placeholder不能直接调用到verbosname,折中使用field的leibel属性.
-            field.widget.attrs = {"class": "form-control", "placeholder": field.label}

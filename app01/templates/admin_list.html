@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div>
+        <div class="container">
+            <!-- 按钮区域 -->
+
+            <div style="margin-bottom: 10px" class="clearfix">
+                <a class="btn btn-success" href="/admin/add/">  <!-- 默认在原页面打开,如果需要打开一个新页面则添加:target="_blank" -->
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  <!-- 加上一个图标 -->
+                    新建管理员
+                </a>
+                <div style="float: right;width: 300px">  <!-- 调整宽度 保证它和新建靓号处于同一行 -->
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="关键字"
+                                   value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                        </div><!-- /input-group -->
+                    </form>
+                </div>
+            </div>
+            <!-- 表格区域 -->
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  <!-- 加上一个图标 -->
+                    管理员列表
+                </div>
+
+                <!-- Table -->
+                <table class="table table-bordered">  <!-- table-bordered 是添加表格边线-->
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>账户</th>
+                        <th>密码</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for query in queryset %}
+                        <tr>
+                            <td>{{ query.id }}</td>
+                            <td>{{ query.username }}</td>
+                            <td>{{ query.password }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs" style="margin-right: 10px"
+                                   href="/admin/{{ query.id }}/edit/">编辑</a>
+                                <a class="btn btn-danger btn-xs" href="/admin/{{ query.id }}/delete/">删除</a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearfix">
+                <ul class="pagination">
+                    {{ page_string }}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

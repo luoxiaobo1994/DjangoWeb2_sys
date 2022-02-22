@@ -7,7 +7,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django import forms
 from app01.utils.bootstrap import BootStrapModelForm
-
+from app01.utils.encrypt import md5
 
 
 # 编辑的单独ModelForm类,因为编辑和新建的校验规则不一样,所以新建一个更好.
@@ -20,7 +20,6 @@ class PrettyEditModelForm(BootStrapModelForm):
         # fields = '__all__'  # 直接引用表里的所有字段
         fields = ['mobile', 'price', 'level', 'status']  # 自定义需要的字段
         # exclude = ['level'] # 除了被选中的字段,都要.
-
 
     # 校验手机号
     def clean_mobile(self):
@@ -59,7 +58,6 @@ class PrettyModelForm(BootStrapModelForm):
         # exclude = ['level'] # 除了被选中的字段,都要.
 
 
-
 class UserModelForm(BootStrapModelForm):
     class Meta:
         model = models.UserInfo
@@ -70,3 +68,39 @@ class UserModelForm(BootStrapModelForm):
         #     "age":forms.NumberInput(attrs={"class":"form-control"}),
         #     "create_time":forms.TextInput(attrs={"class":"form-control"}),
         # }
+
+
+class AdminModelForm(BootStrapModelForm):
+    confirm_password = forms.CharField(label="确认密码", widget=forms.PasswordInput(render_value=True))
+
+    class Meta:
+        model = models.Admin
+        fields = ['username', 'password', 'confirm_password']
+        widgets = {
+            'password': forms.PasswordInput(render_value=True)  # 这个参数保证密码输错了,重新载入时,刚才的输入不会被清空.
+        }
+
+    def clean_password(self):
+        pwd = self.cleaned_data.get('password')
+        return md5(pwd)  # 加密处理
+
+    def clean_confirm_password(self):
+        # cpnfirm:asdasd,self.cleaned_data:{'username': 'asdasdasd', 'password': 'asdasdasdas', 'confirm_password': 'asdasd'}
+        # print(f"clean_confirm_password里直接调用的self.cleaned_data:{self.cleaned_data}")
+        pwd = self.cleaned_data.get('password')  # 加密过的
+        confirm = md5(self.cleaned_data.get("confirm_password"))  # 确认的密码,也加密处理一下.
+        # print(f"cpnfirm:{confirm},self.cleaned_data:{self.cleaned_data}")
+        if confirm == pwd:
+            return confirm  # return返回的数据,决定将什么传入数据库.如果写死,例如:999,则所有人的密码都是999.
+        else:
+            raise ValidationError("两次输入的密码不一致,请检查.")
+        # 补充一点,self.cleaned_data 得到的值,和clean_password的返回值一样.
+        # clean_confirm_password里直接调用的self.cleaned_data:{'username': 'LUOXIAOBO', 'password': 'clean_password的返回值.', 'confirm_password': 'asdasdad'}
+
+
+class AdminEditModelForm(BootStrapModelForm):
+    confirm_password = forms.CharField(label='确认密码', widget=forms.PasswordInput(render_value=True))
+
+    class Meta:
+        model = models.Admin
+        fields = ['username', 'password']

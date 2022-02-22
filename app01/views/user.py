@@ -16,7 +16,7 @@ def user_list(request):
     """ 用户管理 """
     queryset = models.UserInfo.objects.all()
     # depart = models.Department.objects.filter(id=queryset)
-    page_object = Pagination(request, queryset, page_size=2)
+    page_object = Pagination(request, queryset, page_size=10)
     context = {
         "queryset": page_object.page_queryset,
         "page_string": page_object.html()

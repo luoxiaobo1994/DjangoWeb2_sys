@@ -104,3 +104,41 @@ class AdminEditModelForm(BootStrapModelForm):
     class Meta:
         model = models.Admin
         fields = ['username', 'password']
+        widgets = {
+            'password': forms.PasswordInput(render_value=True)  # 这个参数保证密码输错了,重新载入时,刚才的输入不会被清空.
+        }
+
+    def clean_password(self):
+        pwd = self.cleaned_data.get('password')
+        return md5(pwd)  # 加密处理
+
+    def clean_confirm_password(self):
+        pwd = self.cleaned_data.get('password')  # 加密过的
+        confirm = md5(self.cleaned_data.get("confirm_password"))  # 确认的密码,也加密处理一下.
+        if confirm == pwd:
+            return confirm  # return返回的数据,决定将什么传入数据库.如果写死,例如:999,则所有人的密码都是999.
+        else:
+            raise ValidationError("两次输入的密码不一致,请检查.")
+
+
+class AdminResetModelForm(BootStrapModelForm):
+    confirm_password = forms.CharField(label='确认密码', widget=forms.PasswordInput(render_value=True))
+
+    class Meta:
+        model = models.Admin
+        fields = ['password', 'confirm_password']
+        widgets = {
+            'password': forms.PasswordInput(render_value=True)  # 这个参数保证密码输错了,重新载入时,刚才的输入不会被清空.
+        }
+
+    def clean_password(self):
+        pwd = self.cleaned_data.get('password')
+        return md5(pwd)  # 加密处理
+
+    def clean_confirm_password(self):
+        pwd = self.cleaned_data.get('password')  # 加密过的
+        confirm = md5(self.cleaned_data.get("confirm_password"))  # 确认的密码,也加密处理一下.
+        if confirm == pwd:
+            return confirm  # return返回的数据,决定将什么传入数据库.如果写死,例如:999,则所有人的密码都是999.
+        else:
+            raise ValidationError("两次输入的密码不一致,请检查.")

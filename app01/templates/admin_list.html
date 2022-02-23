@@ -38,6 +38,8 @@
                         <th>序号</th>
                         <th>账户</th>
                         <th>密码</th>
+                        <th>重置密码</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,6 +48,9 @@
                             <td>{{ query.id }}</td>
                             <td>{{ query.username }}</td>
                             <td>{{ query.password }}</td>
+                            <td>
+                                <a href="/admin/{{ query.id }}/reset/">重置密码</a>
+                            </td>
                             <td>
                                 <a class="btn btn-primary btn-xs" style="margin-right: 10px"
                                    href="/admin/{{ query.id }}/edit/">编辑</a>

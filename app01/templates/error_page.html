@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <h3>{{ error_msg }}</h3>
+        <div class="alert alert-danger" role="alert">
+            <strong>警告:</strong> <a href="#" class="alert-link">{{ error_msg }}</a> 请尝试重新操作.
+        </div>
+    </div>
+{% endblock %}

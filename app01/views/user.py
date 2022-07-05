@@ -3,7 +3,7 @@
 # TIME: 2022/2/22 13:57
 
 from django.shortcuts import render, redirect
-
+from django.http import JsonResponse
 from app01 import models
 from app01.utils.form import UserModelForm
 from app01.utils.pagination import Pagination
@@ -73,3 +73,6 @@ def user_edit(request, nid):
 def user_delete(request, nid):
     models.UserInfo.objects.filter(id=nid).delete()
     return redirect('/user/list/')
+
+def user_listapi(request, nid):
+    return JsonResponse({'status':200})

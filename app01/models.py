@@ -1,4 +1,9 @@
+import os
 from django.db import models
+import django
+
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'Djangoweb2_sys.settings')
+# django.setup()
 
 
 # Create your models here.

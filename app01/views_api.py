@@ -54,9 +54,9 @@ def edit_user(request, nid):
                 print(f"request.Post data:[{request.POST}]")
                 row_object = models.UserInfo.objects.filter(id=nid).first()  # 不知道为什么，修改之前，还得再拿一次。
                 form = UserModelForm(data=request.POST, instance=row_object)
-                after_data = model_to_dict(models.UserInfo.objects.filter(id=nid).first())
                 if form.is_valid():  # 数据合法
-                    form.save()
+                    form.save()  # 先保存
+                    after_data = model_to_dict(models.UserInfo.objects.filter(id=nid).first())  # 再获取，才是对的。
                     return JsonResponse(
                         {'code': 100200, 'msg': "修改成功。", 'before_data': before_data, 'after_data': after_data})
                 else:  # 数据不合法

@@ -29,7 +29,7 @@ def adduser_api():
 def edituser_api(nid):
     data = {
         # 'csrfmiddlewaretoken': 'cjW9Q4xZDAQWKnSphn1UQtJJF7PWm1lp1dj8lrPRd1RYlTcNvAKzda3CvxMmUFHv',
-        'name': 'api_test033',
+        'name': 'api_test044',
         'password': "xxxxapiapi",
         'age': '28',
         'create_time': '2022-06-30',

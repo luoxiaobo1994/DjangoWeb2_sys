@@ -28,17 +28,16 @@ def user_add(request):
     """ 添加用户功能 """
     if request.method == "GET":
         form = UserModelForm()
-        return render(request,'user_add.html',{'form':form})
+        return render(request, 'user_add.html', {'form': form})
     form = UserModelForm(data=request.POST)
+    # print(request.POST)
     if form.is_valid():
         form.save()
         return redirect('/user/list/')
-
-    return render(request,'user_add.html',{'form':form})
+    return render(request, 'user_add.html', {'form': form})
 
 
 # --------------- ModelForm实例 ---------------
-
 
 
 def user_add_model(request):
@@ -48,8 +47,9 @@ def user_add_model(request):
         return render(request, 'user_model_form_add.html', {"form": form})
     # 获取POST提交的数据,并对数据进行校验.
     form = UserModelForm(data=request.POST)
+    print(f"request.Post:{request.POST}")
     if form.is_valid():  # 校验成功.
-        # print(form.cleaned_data)
+        print(f"form_cleaned_data:{form.cleaned_data}")
         form.save()  # 直接保存到数据库里,简直不要太粗暴...
         return redirect("/user/list")
     # 校验失败.在页面上显示错误信息.
@@ -57,13 +57,13 @@ def user_add_model(request):
 
 
 def user_edit(request, nid):
-    row_objetc = models.UserInfo.objects.filter(id=nid).first()
-    form = UserModelForm(instance=row_objetc)
+    row_object = models.UserInfo.objects.filter(id=nid).first()
+    form = UserModelForm(instance=row_object)
     if request.method == "GET":  # 从用户列表访问这个界面. 则显示你要修改的用户信息.
         return render(request, 'user_edit.html', {"form": form})
     # 校验用户数据
-    row_objetc = models.UserInfo.objects.filter(id=nid).first()  # 还是拿到要修改的那行数据
-    form = UserModelForm(data=request.POST, instance=row_objetc)  # instance告诉你要修改这行,不然save就新增数据了.
+    row_object = models.UserInfo.objects.filter(id=nid).first()  # 还是拿到要修改的那行数据
+    form = UserModelForm(data=request.POST, instance=row_object)  # instance告诉你要修改这行,不然save就新增数据了.
     if form.is_valid():
         form.save()
         return redirect('/user/list/')
@@ -74,7 +74,8 @@ def user_delete(request, nid):
     models.UserInfo.objects.filter(id=nid).delete()
     return redirect('/user/list/')
 
+
 def user_listapi(request, nid):
-    return JsonResponse({'status':200})
+    return JsonResponse({'status': 200})
 
 # def user_

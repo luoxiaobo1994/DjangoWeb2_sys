@@ -5,6 +5,6 @@
 
 import requests
 
-res = requests.get(url="http://127.0.0.1:8000/user/list/api/getuser")
-print(res)
+res = requests.get(url="http://127.0.0.1:8000/app01/getuser?nid=1")
+print(res.json())
 

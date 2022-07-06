@@ -14,9 +14,9 @@ from app01.utils.pagination import Pagination
 
 def user_list(request):
     """ 用户管理 """
-    queryset = models.UserInfo.objects.all()
+    queryset = models.UserInfo.objects.all()  # 数据库里的所有数据。
     # depart = models.Department.objects.filter(id=queryset)
-    page_object = Pagination(request, queryset, page_size=10)
+    page_object = Pagination(request, queryset, page_size=10)  # 分页工具
     context = {
         "queryset": page_object.page_queryset,
         "page_string": page_object.html()
@@ -76,3 +76,5 @@ def user_delete(request, nid):
 
 def user_listapi(request, nid):
     return JsonResponse({'status':200})
+
+# def user_

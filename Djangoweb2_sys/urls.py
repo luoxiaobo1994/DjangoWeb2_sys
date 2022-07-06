@@ -26,7 +26,9 @@ urlpatterns = [
     # 使用这种方式,view函数可以多传一个nid参数.
     path('depart/<int:nid>/modify/', depart.modify_depart),
     # 下面是关于用户的函数
+    path('app01/', include('app01.views.urls')),
     path('user/list/', user.user_list),
+    path('user/list/api_getuserlist', user.user_listapi),  # 做接口的一个尝试。
     path('user/add/', user.user_add),
     path('user/model_add/', user.user_add_model),
     path('user/<int:nid>/edit/', user.user_edit),

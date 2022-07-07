@@ -11,6 +11,14 @@ from app01.models import Admin
 
 def admin_list(request):
     """管理员列表"""
+    # -------------------------------------
+    # 新增功能，鉴权。检查用户是否登陆。
+    # 用户发来请求，获取cookie随机字符串，拿着字符串看看session中有没有。
+    info = request.session.get("info")
+    print(f"用户登陆信息：{info}。")
+    if not info:
+        return redirect('/login/')
+    # -------------------------------------
     # for i in range(20):
     #     Admin.objects.create(username='lll',password='lxb12345')
     data_dict = {}

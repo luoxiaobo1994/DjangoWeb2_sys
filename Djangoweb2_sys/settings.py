@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-dm)1%umjym*fy1r^#+$+75a*j!i5h940#n%7zw@k5w(7p25csz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.2.16.41', '127.0.0.1', '*',]  # 设置服务运行的地址.注意不要漏掉最后的逗号
+ALLOWED_HOSTS = ['10.2.16.41', '127.0.0.1', '*', ]  # 设置服务运行的地址.注意不要漏掉最后的逗号
 
 # Application definition
 
@@ -46,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app01.middleware.auth.AuthMiddleware',  # 中间件
 ]
 
 ROOT_URLCONF = 'Djangoweb2_sys.urls'

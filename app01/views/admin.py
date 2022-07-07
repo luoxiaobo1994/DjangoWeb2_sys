@@ -43,6 +43,7 @@ def admin_add(request):
 def admin_edit(request, nid):
     """ 管理员编辑 """
     title = '编辑管理员'
+    #
     row_object = Admin.objects.filter(id=nid).first()
     if not row_object:
         # return render(request,"error_page.html",{'error_msg':"数据不存在"})  # 指向错误页面

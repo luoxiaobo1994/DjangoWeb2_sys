@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from app01.views import user, depart, pretty_number, admin
+from app01.views import user, depart, pretty_number, admin, account
 
 urlpatterns = [
     path('', user.user_list),  # '' 表示在http://127.0.0.1:8000后面,什么都不加了.就是把默认的主页指向后面的这个函数里.
@@ -44,5 +44,8 @@ urlpatterns = [
     path('admin/<int:nid>/edit/', admin.admin_edit),
     path('admin/<int:nid>/delete/', admin.admin_delete),
     path('admin/<int:nid>/reset/', admin.admin_reset),
+    # 账户管理相关
+    path('login/', account.login),
+
 
 ]

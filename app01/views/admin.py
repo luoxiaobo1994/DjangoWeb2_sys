@@ -19,8 +19,14 @@ def admin_list(request):
     # if not info:
     #     return redirect('/login/')
     # -------------------------------------
-    # for i in range(20):
-    #     Admin.objects.create(username='lll',password='lxb12345')
+    # 调试功能，查看登录信息的
+    info = request.session['info']
+    print(f"check info:{info}")
+    # -------------------------------------
+    # 把自己是默认管理员加进去。
+    # row_object = Admin.objects.filter().all()
+    # if not row_object:
+    # Admin.objects.create(username='root', password='qwe123')
     data_dict = {}
     search_data = request.GET.get('q', '')  # 拿到q携带的参数.
     if search_data:

@@ -67,5 +67,5 @@ def add_phonenum(n=10):
 
 
 if __name__ == '__main__':
-    # add_user_data()
+    add_user_data(20)
     add_phonenum(30)

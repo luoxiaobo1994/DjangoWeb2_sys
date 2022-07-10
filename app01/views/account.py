@@ -55,3 +55,9 @@ def login(request):
     return render(request, 'login.html', {'form': form})
     # else:  # 本页面直接提示即可，不用跳错误页面了。 更直观。
     #     return render(request, 'error_page.html', {'error_msg': "账户验证失败，登陆操作不成功。", 'error_title': "登陆失败"})
+
+
+def logout(request):
+    """ 注销 """
+    request.session.clear()
+    return redirect('/login/')

@@ -46,6 +46,8 @@ urlpatterns = [
     path('admin/<int:nid>/reset/', admin.admin_reset),
     # 账户管理相关
     path('login/', account.login),
-    path('logout/', account.logout)
+    path('logout/', account.logout),
+    path('image/code/', account.image_code),
+
 
 ]

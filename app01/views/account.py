@@ -57,6 +57,11 @@ def login(request):
     #     return render(request, 'error_page.html', {'error_msg': "账户验证失败，登陆操作不成功。", 'error_title': "登陆失败"})
 
 
+def image_code(request):
+    """ 生成随机验证码 """
+    return JsonResponse({'code': '200', 'msg': "yes, you are in "})
+
+
 def logout(request):
     """ 注销 """
     request.session.clear()

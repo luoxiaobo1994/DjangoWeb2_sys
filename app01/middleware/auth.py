@@ -20,7 +20,8 @@ class AuthMiddleware(MiddlewareMixin):
         # 如果有返回值。则可以返回HttpResponse,JsonResponse,以及重定向。
         # ---------
         # 排除一些不需要鉴权的url
-        if request.path_info == '/login/':
+        no_auth = ['/login/', '/image/code/']
+        if request.path_info in no_auth:
             return  # 登录页面无需鉴权，直接进。
         info = request.session.get("info")
         # print(f"user session：{info}。")
@@ -36,7 +37,7 @@ class AuthMiddleware(MiddlewareMixin):
         return response
 
 # class M2(MiddlewareMixin):
-#     """ 中间件1 """
+#     """ 中间件2 做示例用的。 """
 #
 #     def process_request(self, request):
 #         print("中间件M2.进来了。")
@@ -46,12 +47,3 @@ class AuthMiddleware(MiddlewareMixin):
 #         return response
 #
 #
-# class M3(MiddlewareMixin):
-#     """ 中间件1 """
-#
-#     def process_request(self, request):
-#         print("中间件M3.进来了。")
-#
-#     def process_response(self, request, response):
-#         print("中间件M3.出去了。")
-#         return response

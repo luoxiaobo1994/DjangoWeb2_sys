@@ -3,12 +3,16 @@
 # TIME: 2022/7/7 14:26
 # Desc:
 
+import random
 from django.shortcuts import render, redirect
 from django import forms
 from app01 import models
 from app01.utils.bootstrap import BootStrapForm
 from app01.utils.encrypt import md5
 from django.http import JsonResponse
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+fontfile = '../static/font/agua.ttf'
 
 
 class LoginForm(BootStrapForm):
@@ -59,10 +63,60 @@ def login(request):
 
 def image_code(request):
     """ 生成随机验证码 """
-    return JsonResponse({'code': '200', 'msg': "yes, you are in "})
+
+    # 调用
+    img, code_str = check_code(font_file=fontfile)
+    print(code_str)
+    # return JsonResponse({'code': '200', 'msg': code})
 
 
 def logout(request):
     """ 注销 """
     request.session.clear()
     return redirect('/login/')
+
+
+
+
+def check_code(width=120, height=30, char_lengrh=5, font_file=fontfile, font_size=28):
+    """ 返回一个图像对象和图像的文本内容 """
+    code = []
+    img = Image.new(mode='RGB', size=(width, height), color=(255, 255, 255))
+    draw = ImageDraw.Draw(img, mode='RGB')
+
+    def rndChar():
+        """ 生成随机字母 """
+        return chr(random.randint(65, 90))
+
+    def rndColor():
+        """ 生成随机颜色 """
+        return (random.randint(0, 255), random.randint(10, 255), random.randint(64, 255),)
+
+    # 写文字
+    font = ImageFont.truetype(font_file, font_size)
+    for i in range(char_lengrh):
+        char = rndChar()
+        code.append(char)
+        h = random.randint(0, 4)
+        draw.text([i * width / char_lengrh + 0.1, h + 0.1], char, font=font, fill=rndColor())
+
+    # 写干扰点
+    for i in range(40):
+        draw.point([random.randint(0, width), random.randint(0, height)], fill=rndColor())
+    # 写干扰圆圈
+    for i in range(40):
+        draw.point((random.randint(0, width), random.randint(0, height)), fill=rndColor())
+        x = random.randint(0, width)
+        y = random.randint(0, height)
+        draw.arc((x, y, x + 4, y + 4), 0, 90, fill=rndColor())
+
+    # 画干扰线
+    for i in range(5):
+        x1 = random.randint(0, width)
+        y1 = random.randint(0, height)
+        x2 = random.randint(0, width)
+        y2 = random.randint(0, height)
+        draw.line((x1, y1, x2, y2), fill=rndColor())
+
+    img = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
+    return img, ''.join(code)

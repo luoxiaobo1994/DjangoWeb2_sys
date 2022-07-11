@@ -45,8 +45,8 @@
             <label for="id_code">图片验证码</label>
             <div class="row">
                 <div class="col-xs-7">
-                    <input type="text" name="code" class="form-control" placeholder="请输入验证码" required="" id="id_code">
-                    <span style="color:red;"></span>
+                    {{ form.code }}  <!-- 通过表单填写验证码 -->
+                    <span style="color: red;">{{ form.code.errors.0 }}</span>  <!-- 对应的错误显示也要跟上 -->
                 </div>
                 <div class="col-xs-5">
                     <img id="image_code" src="/image/code/" style="width: 125px;">  <!-- 在这里放入验证码的图片地址 -->

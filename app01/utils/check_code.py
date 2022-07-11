@@ -6,7 +6,8 @@
 import random
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-fontfile = '../static/font/agua.ttf'
+fontfile = 'app01/static/font/simhei.ttf'
+
 
 def check_code(width=120, height=30, char_lengrh=5, font_file=fontfile, font_size=28):
     """ 返回一个图像对象和图像的文本内容 """
@@ -31,17 +32,17 @@ def check_code(width=120, height=30, char_lengrh=5, font_file=fontfile, font_siz
         draw.text([i * width / char_lengrh + 0.1, h + 0.1], char, font=font, fill=rndColor())
 
     # 写干扰点
-    for i in range(40):
+    for i in range(30):  # 调少一点，太多了。
         draw.point([random.randint(0, width), random.randint(0, height)], fill=rndColor())
     # 写干扰圆圈
-    for i in range(40):
+    for i in range(30):  # 调少一点，太多了。
         draw.point((random.randint(0, width), random.randint(0, height)), fill=rndColor())
         x = random.randint(0, width)
         y = random.randint(0, height)
         draw.arc((x, y, x + 4, y + 4), 0, 90, fill=rndColor())
 
     # 画干扰线
-    for i in range(5):
+    for i in range(3):  # 调少一点，太多了。
         x1 = random.randint(0, width)
         y1 = random.randint(0, height)
         x2 = random.randint(0, width)

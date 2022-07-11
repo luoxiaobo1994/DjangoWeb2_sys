@@ -3,7 +3,6 @@
 # TIME: 2022/7/7 14:26
 # Desc:
 
-import random
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -78,7 +77,8 @@ def image_code(request):
     # 调用生成随机验证码函数，生成随机码。
     img, code_str = check_code(font_file=fontfile)
     request.session['image_code'] = code_str  # 把当前的验证码存到session里。
-    request.session.set_expiry(60 * 60 * 24 * 15)  # 设置一个超时时间。 超时应该刷新session，这是全局的，设置为15天。
+    # 设置一个超时时间。 超时应该刷新session，这是全局的，设置为15天。
+    request.session.set_expiry(60 * 60 * 24 * 15)
     stream = BytesIO()  # 写到内存里。
     img.save(stream, 'png')
     return HttpResponse(stream.getvalue())  # 将图片返回给网页。

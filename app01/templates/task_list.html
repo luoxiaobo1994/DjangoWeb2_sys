@@ -1,27 +1,70 @@
 {% extends 'layout.html' %}
 {% block content %}
     <div class="container">
-        <h1> 任务管理系统 </h1>
-        <h3> 任务列表 </h3>
-        <input type="button" value="点击" class="btn btn-primary" onclick="clickMe();"/>
+        <div class="panel panel-primary">
+            <div class="panel-heading">新建任务</div>
+            <div class="panel-body">
+                <form id="createForm"> {# 不用再指定method=post了,通过ajax去提交 #}
+                    {# {% csrf_token %}   通过ajax提交，这里可以不要了#}
+                    <div class="clearfix">  {# 用这个来控制,组件可以撑起父级,不至于变形 #}
+                        {% for field in form %}  {# 循环获取字段 #}
+                            <div class="col-xs-6">  {# 栅格,用这个来控制输入框的长度. #}
+                                <div class="form-group" style="position: relative">
+                                    <label>
+                                        {{ field.label }} {# 标题名称 #}
+                                    </label>
+                                    {{ field }}
+                                    <span style="color: red; position: absolute">{{ field.errors.0 }}</span>
+                                    {# 出错了，自动显示在对应字段 #}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="col-xs-12">  {#  按钮也进行栅格管理.和输入框对齐  #}
+                            {# pull-ringht 控制按钮是在右边的,left则在左边. 默认是在左边 #}
+                            <button type="submit" id="btnCreate" class="btn btn-primary pull-right"
+                                    style="margin-right: 15px;">创建任务
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {#   <h1> 任务管理系统 </h1>#}
+        {#   <h3> 任务列表 </h3>#}
+        {#   <input type="button" value="点击" class="btn btn-primary" onclick="clickMe();"/>#}
 
 
     </div>
 {% endblock %}
 {% block js %}
     <script type="text/javascript">
-        function clickMe() {
-            $.ajax(
-                {
-                    url: '/task/ajax/',
-                    type: 'get',
-                    data: {
-                        n1: 123,
-                        n2: 456
-                    },
-                    success: function (res) {   {#  res 是前端返回的值  #}
-                        console.log(res);
-                    }
+        $(function () {
+            // 页面框架加载完成之后,代码自动执行的js功能
+            bindBtnCreateEvent();
+        })
+
+        function bindBtnCreateEvent() {
+            $("#btnCreate").click(function () {
+                    $.ajax({
+                        url: '/task/add/',
+                        type: 'POST',
+                        data: $("#createForm").serialize(),
+                        dataType: "JSON",
+                        contentType: 'application/json;charset=utf-8',
+                        success: function (res) {
+                            if (res.result) {
+                                alert("任务创建成功。");
+                            } else {
+                                alert("任务创建失败，请检查输入的信息。")
+                                $.each(res.error, function (name, data) {
+                                    console.log(name, data)
+                                })
+                            }
+
+                        }
+
+                    })
                 }
             )
         }

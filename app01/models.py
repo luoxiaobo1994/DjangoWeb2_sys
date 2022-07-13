@@ -2,6 +2,7 @@ import os
 from django.db import models
 import django
 
+
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'Djangoweb2_sys.settings')
 # django.setup()
 
@@ -72,3 +73,20 @@ class Admin(models.Model):
     """ 管理员的表 """
     username = models.CharField(verbose_name="用户名", max_length=32)
     password = models.CharField(verbose_name="密码", max_length=64)
+
+    def __str__(self):
+        return self.username  # 外部调用时，定制显示username的字符串。
+
+
+class Task(models.Model):
+    """ 任务表 """
+    level_choices = (
+        (1, "紧急且重要"),
+        (2, "紧急不重要"),
+        (3, "重要不紧急"),
+        (4, "不紧急也不重要")
+    )
+    level = models.SmallIntegerField(verbose_name="级别", choices=level_choices, default=3)
+    title = models.CharField(verbose_name="标题", max_length=64)
+    detail = models.TextField(verbose_name="详细信息")
+    user = models.ForeignKey(verbose_name="负责人", to="Admin", on_delete=models.CASCADE)

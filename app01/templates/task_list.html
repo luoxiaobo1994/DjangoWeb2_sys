@@ -10,11 +10,9 @@
                         {% for field in form %}  {# 循环获取字段 #}
                             <div class="col-xs-6">  {# 栅格,用这个来控制输入框的长度. #}
                                 <div class="form-group" style="position: relative;margin-bottom: 20px;">
-                                    <label>
-                                        {{ field.label }} {# 标题名称 #}
-                                    </label>
+                                    <label>{{ field.label }} </label> {# 标题名称 #}
                                     {{ field }}
-                                    <span style="color: red; position: absolute">{{ field.errors.0 }}</span>
+                                    <span class="error-msg" style="color: red; position: absolute"></span>
                                     {# 出错了，自动显示在对应字段 #}
                                 </div>
                             </div>
@@ -46,6 +44,8 @@
 
         function bindBtnCreateEvent() {
             $("#btnCreate").click(function () {
+                    $(".error-msg").text("");
+                    {# 刷新之前,把错误信息清空.  .empty() 同理 #}
                     $.ajax({
                         url: '/task/add/',
                         type: 'POST',
@@ -53,13 +53,15 @@
                         dataType: "JSON",
                         contentType: 'application/json;charset=utf-8',
                         success: function (res) {
-                            if (res.result) {
+                            if (res.result) {      // 前端返回结果的字段名是 result
                                 alert("任务创建成功。");
                             } else {
-                                alert("任务创建失败，请检查输入的信息。")
+                                console.log(res.error);
+                                {#alert("任务创建失败，请检查输入的信息。")#}
                                 $.each(res.error, function (name, data) {
-                                    console.log(name, data);
-                                    $("#id_" + name).next().text(data[0])  {# 对应字段的下一个文本数组的首个. #}
+                                    // console.log(name, data);
+                                    $("#id_" + name).next().text(data[0]);
+                                    {# 对应字段的下一个文本数组的首个. #}
                                 })
                             }
 

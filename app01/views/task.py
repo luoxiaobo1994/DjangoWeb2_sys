@@ -40,12 +40,14 @@ def task_ajax(request):
 @csrf_exempt  # 装饰器修饰即可。
 def task_add(request):
     """ 新增任务 """
-    print(f"post data:{request.POST}")
+    # print(f"post data:{request.POST}")
     # 用户发送过来的数据进行校验.
     form = TaskModelForm(data=request.POST)
     if form.is_valid():
-        form.save()
-        return JsonResponse({'result': True})
+        # form.save()
+        data_dict = {'result': True, 'msg': "create task success."}
+        return HttpResponse(json.dumps(data_dict, ensure_ascii=False))
     # print(f"form.errors : {form.errors} ------------")  # type:django.forms.utils.ErrorDict
     data_dict = {'result': False, 'error': form.errors}
+    # print(form.errors)
     return HttpResponse(json.dumps(data_dict, ensure_ascii=False))  # 错误类型转字典.

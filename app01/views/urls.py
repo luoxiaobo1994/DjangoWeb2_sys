@@ -11,5 +11,7 @@ urlpatterns = [
     path('getuser', views_api.get_user),  # 完整请求网址：http://127.0.0.1:8000/app01/getuser
     path('adduser', views_api.add_user),  # 完整请求网址：http://127.0.0.1:8000/app01/adduser
     path('deluser', views_api.del_user),  # 完整请求网址：http://127.0.0.1:8000/app01/deluser
-    path('edituser/<int:nid>/', views_api.edit_user)  # 完整请求网址：http://127.0.0.1:8000/app01/edituser
+    path('edituser/<int:nid>/', views_api.edit_user),  # 完整请求网址：http://127.0.0.1:8000/app01/edituser
+    path('gettoken', views_api.user_token)
+
 ]

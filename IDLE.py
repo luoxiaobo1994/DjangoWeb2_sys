@@ -50,7 +50,16 @@ def deluser_api():
     print(res.json())
 
 
+def get_token():
+    data = {
+        'username': 'luoxiaobo',
+        'password': 'lxb@12345'
+    }
+    res = requests.get(url='http://127.0.0.1:8000/app01/gettoken', data=data)
+    print(res.json())
+
 if __name__ == '__main__':
     # adduser_api()
     # deluser_api()
-    edituser_api(17)
+    # edituser_api(17)
+    get_token()

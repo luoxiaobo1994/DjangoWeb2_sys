@@ -1,14 +1,41 @@
 # -*- coding:utf-8 -*-
 # Author: luoxiaobo
 # TIME: 2022/7/6 14:30
-# Desc:
+# Desc: 接口函数。
 
-from django.shortcuts import render
-from django.http import HttpResponse
+import json
+from django.forms import model_to_dict
 from django.http import JsonResponse
+from django.contrib.auth import authenticate, login
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_jwt.settings import api_settings
 from app01 import models
-from app01.utils.form import UserModelForm
-from django.forms.models import model_to_dict
+
+
+def user_token(request):
+    obj = json.loads(request.body)
+    # 1.先获取到接口传入的参数。
+    username = obj.get('username', None)
+    password = obj.get('password', None)
+
+    if all([username, password]):  # 全部都填入了。
+        row_object = models.Admin.objects.filter(username=username, password=password)
+        is_login = authenticate(request, username=username, password=password)
+        data = model_to_dict(row_object)  # 转成字典
+        if data:
+            jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+            jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+            payload = jwt_payload_handler(is_login)
+            token = jwt_encode_handler(payload)
+            print(f"token:{token}")
+            print(f"在数据库中查询到的结果：{data},生成的Token:{token}")
+            return JsonResponse({'code': 200, 'msg': 'request succeeded', 'token': token})
+        return JsonResponse({'code': 403, 'msg': 'bad request: Incorrect username or password'})
+
+    else:
+        return JsonResponse({'code': 403, 'msg': 'bad request: Account and password cannot be empty'})
 
 
 def get_user(request):
